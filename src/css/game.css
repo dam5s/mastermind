@@ -1,0 +1,85 @@
+body {
+    padding: 2em;
+    background-color: #eaa;
+}
+
+.game {
+    overflow: auto;
+}
+
+h1 {
+    margin-bottom: 1em;
+    font-size: 200%;
+    font-family: serif;
+}
+
+div {
+    display: block;
+    box-sizing: border-box;
+}
+
+.attempts {
+    float: left;
+    margin-right: 2em;
+}
+
+.controls {
+    float: left;
+    width: 9em;
+}
+
+.controls .pin {
+    margin-bottom: .5em;
+}
+
+.attempt {
+    clear: both;
+    overflow: auto;
+    margin-bottom: 1em;
+}
+
+.pins {
+    margin-right: 2em;
+}
+
+.pin, .clues {
+    width: 2em;
+    height: 2em;
+    float: left;
+}
+
+.pin {
+    margin-right: .5em;
+    border-radius: 100%;
+}
+
+.Red { background-color: darkred; }
+.Cyan { background-color: aqua; }
+.Green { background-color: forestgreen; }
+.Orange { background-color: orange; }
+.Magenta { background-color: darkmagenta; }
+.Blue { background-color: darkblue; }
+.None { background-color: rgba(0, 0, 0, .2) }
+.Ok { background-color: rgba(0, 0, 0, .2) }
+.Ok:after {
+    content: 'Ok';
+    display: block;
+    color: white;
+    line-height: 2em;
+    width: 2em;
+    text-align: center;
+}
+
+.clue {
+    margin-right: .2em;
+    margin-top: .1em;
+    margin-bottom: .1em;
+    width: .8em;
+    height: .8em;
+    float: left;
+    border-radius: 100%;
+}
+
+.Correct { background-color: black; }
+.Misplaced { background-color: white; }
+.NoMatch { background-color: rgba(0, 0, 0, .2) }
