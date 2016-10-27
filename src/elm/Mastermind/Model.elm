@@ -13,12 +13,6 @@ type Color
     | None
 
 
-type Clue
-    = Correct
-    | Misplaced
-    | NoMatch
-
-
 type alias Model =
     { solution : Maybe (Four Color)
     , pastAttempts : List (Four Color)

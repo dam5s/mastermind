@@ -1,6 +1,6 @@
 module Tests exposing (..)
 
-import Mastermind.GameTests
+import Mastermind.CluesTests
 import Test exposing (..)
 import Expect
 import String
@@ -9,5 +9,5 @@ import String
 all : Test
 all =
     describe "Mastermind"
-        [ Mastermind.GameTests.all
+        [ Mastermind.CluesTests.all
         ]

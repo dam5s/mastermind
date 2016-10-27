@@ -1,9 +1,9 @@
-module Mastermind.GameTests exposing (all)
+module Mastermind.CluesTests exposing (all)
 
 import Expect
 import Mastermind.Four as Four exposing (Four)
-import Mastermind.Game exposing (buildClues)
-import Mastermind.Model exposing (Clue(..), Color(..))
+import Mastermind.Clues exposing (buildClues, Clue(..))
+import Mastermind.Model exposing (Color(..))
 import Test exposing (Test, describe, test)
 
 
@@ -20,7 +20,7 @@ all =
                         Four.build Magenta Magenta Magenta Magenta
 
                     expected =
-                        Four.build NoMatch NoMatch NoMatch NoMatch
+                        Four.build NoClue NoClue NoClue NoClue
                 in
                     Expect.equal expected (buildClues solution attempt)
         , test "with exact matches" <|
@@ -36,17 +36,30 @@ all =
                         Four.build Correct Correct Correct Correct
                 in
                     Expect.equal expected (buildClues solution attempt)
-        , test "with one partial match" <|
+        , test "with partial matches" <|
             \() ->
                 let
                     solution =
-                        Four.build Orange Orange Blue Orange
+                        Four.build Orange Orange Blue Green
 
                     attempt =
-                        Four.build Blue Red Red Red
+                        Four.build Blue Green Red Red
 
                     expected =
-                        Four.build Misplaced NoMatch NoMatch NoMatch
+                        Four.build Misplaced Misplaced NoClue NoClue
+                in
+                    Expect.equal expected (buildClues solution attempt)
+        , test "with repeating partial match" <|
+            \() ->
+                let
+                    solution =
+                        Four.build Orange Blue Blue Green
+
+                    attempt =
+                        Four.build Magenta Magenta Orange Orange
+
+                    expected =
+                        Four.build Misplaced NoClue NoClue NoClue
                 in
                     Expect.equal expected (buildClues solution attempt)
         ]

@@ -1,11 +1,11 @@
-module Mastermind.Game exposing (main, buildClues)
+module Mastermind.Game exposing (main)
 
 import Html exposing (Html, div, h1, li, nav, p, section, text, ul)
 import Html.App
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import List.Extra exposing (zip)
-import Mastermind.Model exposing (Clue(..), Color(..), Model)
+import Mastermind.Clues exposing (Clue(NoClue), buildClues)
+import Mastermind.Model exposing (Color(..), Model)
 import Mastermind.Four as Four exposing (Four)
 import Mastermind.Generator as Generator
 import Random exposing (Generator)
@@ -14,6 +14,8 @@ import Random exposing (Generator)
 type Msg
     = SolutionGenerated (Four Color)
     | Choose Color
+    | Erase
+    | Check
 
 
 initialModel : Model
@@ -65,8 +67,8 @@ view model =
                     , div [ onClick (Choose Orange), class "pin Orange" ] []
                     , div [ onClick (Choose Magenta), class "pin Magenta" ] []
                     , div [ onClick (Choose Blue), class "pin Blue" ] []
-                    , div [ onClick (Choose None), class "pin None" ] []
-                    , div [ class "pin Ok" ] []
+                    , div [ onClick Erase, class "pin None" ] []
+                    , div [ onClick Check, class "pin Ok" ] []
                     ]
                 ]
 
@@ -98,79 +100,12 @@ viewCurrentAttempt attempt =
             , viewPin attempt.four
             ]
         , div [ class "clues" ]
-            (List.repeat 4 (viewClue NoMatch))
+            (List.repeat 4 (viewClue NoClue))
         ]
 
 
 viewRemainingAttempt =
     viewCurrentAttempt
-
-
-buildClues : Four Color -> Four Color -> Four Clue
-buildClues solution attempt =
-    let
-        solutionList =
-            Four.list solution
-
-        attemptList =
-            Four.list attempt
-    in
-        cluesFromMatches
-            (numberOfPerfectMatches solutionList attemptList)
-            (numberOfMisplacedMatches solutionList attemptList)
-
-
-cluesFromMatches : Int -> Int -> Four Clue
-cluesFromMatches perfect misplaced =
-    listToFourClue
-        (List.concat
-            [ (List.repeat perfect Correct)
-            , (List.repeat misplaced Misplaced)
-            , (List.repeat (4 - misplaced - perfect) NoMatch)
-            ]
-        )
-
-
-listToFourClue : List Clue -> Four Clue
-listToFourClue list =
-    { one = clueAtIndex 0 list
-    , two = clueAtIndex 1 list
-    , three = clueAtIndex 2 list
-    , four = clueAtIndex 3 list
-    }
-
-
-clueAtIndex : Int -> List Clue -> Clue
-clueAtIndex index list =
-    Maybe.withDefault NoMatch (List.head (List.drop index list))
-
-
-numberOfPerfectMatches : List Color -> List Color -> Int
-numberOfPerfectMatches solutionList attemptList =
-    zip solutionList attemptList
-        |> List.foldl accumulateMatches 0
-
-
-numberOfMisplacedMatches : List Color -> List Color -> Int
-numberOfMisplacedMatches solutionList attemptList =
-    attemptList
-        |> List.foldl (accumulateMisplaced solutionList) 0
-
-
-accumulateMatches : ( Color, Color ) -> Int -> Int
-accumulateMatches ( colorOne, colorTwo ) current =
-    if colorOne == colorTwo then
-        current + 1
-    else
-        current
-
-
-accumulateMisplaced : List Color -> Color -> Int -> Int
-accumulateMisplaced solutionList attempt current =
-    if List.member attempt solutionList then
-        current + 1
-    else
-        current
 
 
 viewClue : Clue -> Html Msg
@@ -190,14 +125,49 @@ update msg model =
             ( { model | solution = Just new }, Cmd.none )
 
         Choose color ->
-            let
-                current =
-                    model.currentAttempt
+            { model | currentAttempt = chooseColor model.currentAttempt color }
+                ! []
 
-                new =
-                    { current | one = color }
-            in
-                ( { model | currentAttempt = new }, Cmd.none )
+        Erase ->
+            { model | currentAttempt = erase model.currentAttempt }
+                ! []
+
+        Check ->
+            case model.remainingAttempts of
+                [] ->
+                    ( model, Cmd.none )
+
+                x :: xs ->
+                    { model
+                        | pastAttempts = (List.append model.pastAttempts [ model.currentAttempt ])
+                        , currentAttempt = x
+                        , remainingAttempts = xs
+                    }
+                        ! []
+
+
+chooseColor : Four Color -> Color -> Four Color
+chooseColor attempt color =
+    if attempt.one == None then
+        { attempt | one = color }
+    else if attempt.two == None then
+        { attempt | two = color }
+    else if attempt.three == None then
+        { attempt | three = color }
+    else
+        { attempt | four = color }
+
+
+erase : Four Color -> Four Color
+erase attempt =
+    if attempt.four /= None then
+        { attempt | four = None }
+    else if attempt.three /= None then
+        { attempt | three = None }
+    else if attempt.two /= None then
+        { attempt | two = None }
+    else
+        { attempt | one = None }
 
 
 main : Program Never
