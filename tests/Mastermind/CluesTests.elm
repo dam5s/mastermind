@@ -62,4 +62,17 @@ all =
                         Four.build Misplaced NoClue NoClue NoClue
                 in
                     Expect.equal expected (buildClues solution attempt)
+        , test "when one in attempt and multiple in solution" <|
+            \() ->
+                let
+                    solution =
+                        Four.build Orange Blue Blue Orange
+
+                    attempt =
+                        Four.build Orange Magenta Magenta Magenta
+
+                    expected =
+                        Four.build Correct NoClue NoClue NoClue
+                in
+                    Expect.equal expected (buildClues solution attempt)
         ]

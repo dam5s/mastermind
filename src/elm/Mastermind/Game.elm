@@ -58,6 +58,7 @@ view model =
                         [ (List.map (viewAttemptWithClues solution) model.pastAttempts)
                         , [ viewCurrentAttempt model.currentAttempt ]
                         , (List.map viewRemainingAttempt model.remainingAttempts)
+                        , [ viewCurrentAttempt solution ]
                         ]
                     )
                 , nav [ class "controls" ]

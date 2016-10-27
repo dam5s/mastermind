@@ -82,4 +82,4 @@ div {
 
 .Correct { background-color: black; }
 .Misplaced { background-color: white; }
-.NoMatch { background-color: rgba(0, 0, 0, .2) }
+.NoClue { background-color: rgba(0, 0, 0, .2) }
