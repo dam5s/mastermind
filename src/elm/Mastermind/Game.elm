@@ -1,6 +1,6 @@
 module Mastermind.Game exposing (main)
 
-import Html exposing (Html, div, h1, li, nav, p, section, text, ul)
+import Html exposing (Html, a, button, div, h1, li, nav, p, section, text, ul)
 import Html.App
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
@@ -8,6 +8,7 @@ import Mastermind.Clues exposing (Clue(NoClue), buildClues)
 import Mastermind.Model exposing (Color(..), Model)
 import Mastermind.Four as Four exposing (Four)
 import Mastermind.Generator as Generator
+import Mastermind.Ports exposing (GameState, gameLoaded, loadGame, saveGame, toGameState, toModel)
 import Random exposing (Generator)
 
 
@@ -16,6 +17,9 @@ type Msg
     | Choose Color
     | Erase
     | Check
+    | SaveGame
+    | LoadGame
+    | GameLoaded GameState
 
 
 initialModel : Model
@@ -70,6 +74,10 @@ view model =
                     , div [ onClick (Choose Blue), class "pin Blue" ] []
                     , div [ onClick Erase, class "pin None" ] []
                     , div [ onClick Check, class "pin Ok" ] []
+                    ]
+                , nav [ class "controls" ]
+                    [ button [ onClick SaveGame ] [ text "Save" ]
+                    , button [ onClick LoadGame ] [ text "Load" ]
                     ]
                 ]
 
@@ -146,6 +154,15 @@ update msg model =
                     }
                         ! []
 
+        SaveGame ->
+            ( model, saveGame (toGameState model) )
+
+        LoadGame ->
+            ( model, loadGame True )
+
+        GameLoaded gameState ->
+            ( toModel gameState, Cmd.none )
+
 
 chooseColor : Four Color -> Color -> Four Color
 chooseColor attempt color =
@@ -171,11 +188,16 @@ erase attempt =
         { attempt | one = None }
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    gameLoaded GameLoaded
+
+
 main : Program Never
 main =
     Html.App.program
         { init = init
         , view = view
         , update = update
-        , subscriptions = (always Sub.none)
+        , subscriptions = subscriptions
         }
