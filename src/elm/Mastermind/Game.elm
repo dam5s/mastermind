@@ -1,7 +1,6 @@
 module Mastermind.Game exposing (main)
 
-import Html exposing (Html, a, button, div, h1, li, nav, p, section, text, ul)
-import Html.App
+import Html as Html exposing (Html, a, button, div, h1, li, nav, p, section, text, ul)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Mastermind.Clues exposing (Clue(NoClue), buildClues)
@@ -193,9 +192,9 @@ subscriptions model =
     gameLoaded GameLoaded
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
-    Html.App.program
+    Html.program
         { init = init
         , view = view
         , update = update
