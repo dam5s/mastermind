@@ -2,7 +2,7 @@ module Mastermind.Clues exposing (Clue(..), buildClues)
 
 import List.Extra exposing (zip)
 import Mastermind.Four as Four exposing (Four)
-import Mastermind.Model exposing (Color)
+import Mastermind.Model exposing (Color(None))
 
 
 type Clue
@@ -29,8 +29,28 @@ buildPotentialMatches solution attempt =
     let
         exactMatches =
             initialMatches solution attempt
+
+        updatedAttempts =
+            removeMatchedAttempts exactMatches attempt
     in
-        findPartialMatches exactMatches attempt
+        findPartialMatches exactMatches updatedAttempts
+
+
+removeMatchedAttempts : Four PotentialMatch -> Four Color -> Four Color
+removeMatchedAttempts matches attempts =
+    { one = removeAttemptIfMatched matches.one attempts.one
+    , two = removeAttemptIfMatched matches.two attempts.two
+    , three = removeAttemptIfMatched matches.three attempts.three
+    , four = removeAttemptIfMatched matches.four attempts.four
+    }
+
+
+removeAttemptIfMatched : PotentialMatch -> Color -> Color
+removeAttemptIfMatched potentialMatch attempt =
+    if potentialMatch == Match Correct then
+        None
+    else
+        attempt
 
 
 initialMatches : Four Color -> Four Color -> Four PotentialMatch
