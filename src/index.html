@@ -10,20 +10,7 @@
 </head>
 <body>
 
-<script src="js/game.js"></script>
-<script>
-    var app = Elm.Mastermind.Game.fullscreen();
-
-    app.ports.saveGame.subscribe(function (savedGame) {
-        localStorage.setItem('savedGame', JSON.stringify(savedGame));
-        app.ports.gameSaved.send(true);
-    });
-
-    app.ports.loadGame.subscribe(function () {
-        var savedGame = localStorage.getItem('savedGame');
-        app.ports.gameLoaded.send(JSON.parse(savedGame));
-    });
-</script>
+<script src="ports.js"></script>
 
 </body>
 </html>

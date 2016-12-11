@@ -1,6 +1,20 @@
+/* Allow window to be dragged from anywhere */
+* {
+    -webkit-app-region: drag;
+}
+
+button, a, input {
+    -webkit-app-region: no-drag;
+}
+
+html {
+    background-color: #7a7;
+}
+
 body {
-    padding: 2em;
-    background-color: #aea;
+    -webkit-user-select: none;
+    padding: 2rem;
+    height: 100%;
 }
 
 .game {
@@ -8,8 +22,8 @@ body {
 }
 
 h1 {
-    margin-bottom: 1em;
-    font-size: 200%;
+    margin-bottom: 2rem;
+    font-size: 265%;
     font-family: serif;
 }
 
@@ -20,36 +34,39 @@ div {
 
 .attempts {
     float: left;
-    margin-right: 2em;
+    margin-right: 2rem;
+    width: 18rem;
 }
 
 .controls {
     float: left;
-    width: 9em;
+    width: 9rem;
+    margin-bottom: 2rem;
 }
 
 .controls .pin {
-    margin-bottom: .5em;
+    margin-bottom: .5rem;
+    cursor: pointer;
 }
 
 .attempt {
     clear: both;
     overflow: auto;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 }
 
 .pins {
-    margin-right: 2em;
+    margin-right: 2rem;
 }
 
 .pin, .clues {
-    width: 2em;
-    height: 2em;
+    width: 2.2rem;
+    height: 2.2rem;
     float: left;
 }
 
 .pin {
-    margin-right: .5em;
+    margin-right: .5rem;
     border-radius: 100%;
 }
 
@@ -60,22 +77,13 @@ div {
 .Magenta { background-color: darkmagenta; }
 .Blue { background-color: darkblue; }
 .None { background-color: rgba(0, 0, 0, .2) }
-.Ok { background-color: rgba(0, 0, 0, .2) }
-.Ok:after {
-    content: 'Ok';
-    display: block;
-    color: white;
-    line-height: 2em;
-    width: 2em;
-    text-align: center;
-}
 
 .clue {
-    margin-right: .2em;
-    margin-top: .1em;
-    margin-bottom: .1em;
-    width: .8em;
-    height: .8em;
+    margin-right: .2rem;
+    margin-top: .1rem;
+    margin-bottom: .1rem;
+    width: .8rem;
+    height: .8rem;
     float: left;
     border-radius: 100%;
 }
@@ -83,3 +91,37 @@ div {
 .Correct { background-color: black; }
 .Misplaced { background-color: white; }
 .NoClue { background-color: rgba(0, 0, 0, .2) }
+
+button {
+    cursor: pointer;
+    background-color: #363;
+    color: #fff;
+    font-weight: 500;
+    font-size: 80%;
+
+    border: none;
+    border-radius: 2rem;
+    padding: .6rem 1rem;
+
+    margin-left: .2rem;
+    margin-bottom: .2rem;
+}
+
+button:active {
+    background-color: #242;
+}
+
+button:focus {
+    outline: none;
+}
+
+.Check {
+    box-sizing: border-box;
+    width: 4.6rem;
+}
+
+.SaveLoad {
+    position: absolute;
+    bottom: 0;
+    right: 2rem;
+}

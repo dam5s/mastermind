@@ -61,7 +61,6 @@ view model =
                         [ (List.map (viewAttemptWithClues solution) model.pastAttempts)
                         , [ viewCurrentAttempt model.currentAttempt ]
                         , (List.map viewRemainingAttempt model.remainingAttempts)
-                        , [ viewCurrentAttempt solution ]
                         ]
                     )
                 , nav [ class "controls" ]
@@ -71,10 +70,10 @@ view model =
                     , div [ onClick (Choose Orange), class "pin Orange" ] []
                     , div [ onClick (Choose Magenta), class "pin Magenta" ] []
                     , div [ onClick (Choose Blue), class "pin Blue" ] []
-                    , div [ onClick Erase, class "pin None" ] []
-                    , div [ onClick Check, class "pin Ok" ] []
+                    , div [ onClick Erase, class "pin None Erase" ] []
+                    , button [ onClick Check, class "Check" ] [ text "Check" ]
                     ]
-                , nav [ class "controls" ]
+                , nav [ class "controls SaveLoad" ]
                     [ button [ onClick SaveGame ] [ text "Save" ]
                     , button [ onClick LoadGame ] [ text "Load" ]
                     ]
